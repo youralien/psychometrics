@@ -1,7 +1,7 @@
 psychometrics hw2
 ================
 Ryan Louie
-2018-04-09
+2018-04-10
 
 Some Helpful Tips on R Notebooks
 --------------------------------
@@ -85,6 +85,13 @@ pairs.panels(dataset[-1], pch=".", gap=0)
 Multiple Regression of GREV and GREQ predicting MA
 --------------------------------------------------
 
+[Helpful link on Interpretation of the LM output](https://stats.stackexchange.com/questions/5135/interpretation-of-rs-lm-output)
+
+-   5 point summary of Residuals Checks out (0 median, 1Q and 3Q are same value)
+-   Estimates are the mean of the distribution of the Gaussian normal random variable -- our coefficients in the model
+-   t values are Estimates (betas) divided by Std. Errors.
+-   The F is the ratio of two variances (SSR/SSE), the variance explained by the parameters in the model (sum of squares of regression, SSR) and the residual or unexplained variance (sum of squares of error, SSE).
+
 ``` r
 fit1 <- lm(MA ~ GREV + GREQ, data = dataset)
 summary(fit1)
@@ -141,6 +148,14 @@ summary(fit2)
 
 Compare these two models
 ------------------------
+
+[Helpful Stackexchange Link](https://stats.stackexchange.com/questions/53312/comparing-two-models-using-anova-function-in-r)
+
+We are using a One-Way Anova because we have one indep var (MA) Res.DF = Residual Degress of Freedom RSS = Residual Sum of Squares For all but the first model, the change in degrees of freedom (1) and sum of squares (24) is also given. Normally the F statistic is most appropriate, which compares the mean square for a row to the residual sum of squares for the largest model considered.
+
+[What is an F statistic link](http://www.statisticshowto.com/probability-and-statistics/f-statistic-value-test/)
+
+Model 2 is "better" since it provides less residual sum of squares.
 
 ``` r
 anova(fit1, fit2)
