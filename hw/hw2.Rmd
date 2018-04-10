@@ -1,6 +1,8 @@
 ---
 title: "psychometrics hw2"
-output: html_notebook
+author: "Ryan Louie"
+date: "`r format(Sys.Date())`"
+output: github_document
 ---
 
 ## Some Helpful Tips on R Notebooks
