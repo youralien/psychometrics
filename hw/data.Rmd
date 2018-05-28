@@ -1,0 +1,17 @@
+---
+title: "Data Science Nights"
+output: html_notebook
+---
+
+Motivation for this work: https://fivethirtyeight.com/features/higher-rates-of-hate-crimes-are-tied-to-income-inequality/
+
+
+```{r}
+dataset <- read.table(file="datasets/538hatecrime.csv", sep = ",", header=TRUE)
+describe(dataset)
+```
+
+```{r}
+
+```
+

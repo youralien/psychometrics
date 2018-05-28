@@ -1,0 +1,28 @@
+---
+title: "Data Science Nights"
+output: html_notebook
+---
+
+Motivation for this work: https://fivethirtyeight.com/features/higher-rates-of-hate-crimes-are-tied-to-income-inequality/
+
+
+```{r}
+library(psych)
+dataset <- read.table(file="datasets/538hatecrime.csv", sep = ",", header=TRUE)
+describe(dataset)
+```
+
+## Show correlations between variables
+```{r}
+round(cor(dataset[-1], use="pairwise"),2)
+```
+
+```{r}
+pairs.panels(dataset[-1], pch=".", gap=0)
+```
+
+```{r}
+model <- lm(avg_hatecrimes_per_100k_fbi ~ median_household_income + gini_index + share_non_citizen, data = dataset)
+summary(model)
+```
+

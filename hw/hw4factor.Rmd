@@ -1,0 +1,96 @@
+---
+title: "psychometrics hw4 factor analysis"
+author: "Ryan Louie"
+date: "`r format(Sys.Date())`"
+output: github_document
+---
+
+## Some Helpful Tips on R Notebooks
+
+Try executing this chunk by clicking the *Run* button within the chunk or by placing your cursor inside it and pressing *Cmd+Shift+Enter*. 
+
+Add a new chunk by clicking the *Insert Chunk* button on the toolbar or by pressing *Cmd+Option+I*.
+
+When you save the notebook, an HTML file containing the code and output will be saved alongside it (click the *Preview* button or press *Cmd+Shift+K* to preview the HTML file). 
+
+## Load and Describe the Data
+
+```{r}
+library(psych)
+datafilename<- "datasets/ability.txt"
+dataset <- read.table(datafilename, header=TRUE)
+describe(dataset)
+```
+
+## Correlations
+
+The rotate items are highly correlated with one another, while the letter itmes are to a lesser extent.
+
+```{r}
+R <- lowerCor(dataset)
+corPlot(R)
+```
+
+## Scree
+
+From Revelle's tutorial on FA,
+
+- Plotting the magnitude of the successive eigen values and applying the scree test (a sudden drop in eigen values analogous to the change in slope seen when scrambling up the talus slope of a mountain and approaching the rock face (Cattell, 1966).
+- The scree test is quite appealing but can lead to differences of interpretation as to when the scree “breaks”.
+
+In this example, scree breaks at 2 or 3 factors, depending on interpretation! In addition, the not recommended rule of when the eigenvalues = 1 for Prinicipal Components says the same thing as the Scree plot.
+```{r}
+scree(R)
+```
+
+## Parallel Analysis for Finding Number of Factors
+
+Extracting factors until the eigen values of the real data are less than the corresponding eigen values of a random data set of the same size (parallel analysis) fa.parallel (Horn, 1965).
+
+Drawback: Parallel analysis is partially sensitive to sample size in that for large samples (N > 1,000) all of the eigen values of random factors will be very close to 1.
+
+```{r}
+fa.parallel(dataset)
+```
+
+## Nfactors
+
+VSS with Complexity c = 1 (only using c greatest loadings for each variable) seems to indicate 1 or 2 factors
+VSS with c = 2 indicates 2 factors, although the slope or peak isn't very strong.
+
+Empirical Bayesian Information Criterion (BIC) is best when the criterion is lowest.  This hapens at 4 factors.
+
+#### Not sure...
+Complexity
+
+```{r}
+nfactors(dataset)
+```
+
+## nfactors with tetrachoric
+
+Not many obvious differences...
+
+```{r}
+nfactors(x=dataset, cor='tet')
+```
+
+```{r}
+fa1 <- fa(dataset, nfactors = 1)
+fa.diagram(fa1)
+```
+
+```{r}
+fa2 <- fa(dataset, nfactors = 2)
+fa.diagram(fa2)
+```
+```{r}
+fa3 <- fa(dataset, nfactors = 3)
+fa.diagram(fa3)
+```
+
+```{r}
+fa4 <- fa(dataset, nfactors = 4)
+fa.diagram(fa4)
+```
+
