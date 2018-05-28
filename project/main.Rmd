@@ -1,0 +1,225 @@
+---
+title: "Analysis of an Exploration of Rapport / Synchrony Interplay"
+author: "Ryan Louie"
+date: "5/27/2018"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+```{r cars}
+summary(cars)
+```
+
+## Including Plots
+
+You can also embed plots, for example:
+
+```{r pressure, echo=FALSE}
+plot(pressure)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+
+
+## Introduction
+
+The tendency to synchronize physical movements, known as behavior synchrony, has importance for social relationships. Researches have hypothesized and found that this synchrony is a visible manifestation of dyadic rapport development. In addition to behavior synchrony, other factors have been observed to also affect rapport including situational conditions. The study dataset \cite{maindataset} was motivated to see explore how personal and situational conditions have an affect on the synchrony and rapport dynamic.
+
+My contribution will follow several parts
+
+* I will report typical psychometric characteristics of some of the questionares administered, since the questionare data for each of these items. First, this is important from an exercise in applying psychometric principles. Why is this important to the questions I want to ask? 
+* 
+
+## Background
+
+### Study 1
+
+##### Theoretical Motivation
+> Dyadic Power Theory posits that when an individuals perception of responsibility increases, their likelihood of communicating using dominant behavior is subsequently heightened. Dominant communication displays hinder rapport-building, and thus Study 1 examined how perceptions of authority and the gender-specificity of an interdependent task (as gender scripts magnify self perceptions of social power [11]) influenced rapport development and nonverbal coordination.
+
+##### Method
+Study 1 investigated this gender-specificity by assigning a task of creating a dinner menu for two types of parties: 1) a baby shower and 2) a super bowl game. Based on theory, we could guess that females would display more dominant communication for organizing the baby shower, while men would do the same for the super bowl game.
+
+### Study 3
+
+##### Theoretical Motivation
+> Cognitive load amplifies perceptions of task difficulty [16] and mental effort [27], which, in turn, might hinder one’s ability to generate and sense rapport. In addition, Bernieri, Gillis, Davis & Grahe [17] discovered that tasks encouraging self-disclosure between interaction partners contributed to increased levels of rapport. Therefore, Study 3 examined the effects of cognitive load and task type on rapport-building and consequential synchrony.
+
+##### Method
+Study 3 investigated this by
+
+### Study 4
+
+##### Theoretical Motivation
+> Dyadic tasks requiring partner reliance tend to yield higher rapport-ratings between the dyad members [8], as these tasks encourage responsiveness between interactants and allow them to focus on a shared goal [18]. Likewise, these tasks encourage dyad members to move more, which increases the likelihood that they will coordinate their movements above chance levels [19]. Study 4 builds off of the cognitive load manipulation in Study 3 while also investigating the influence of task interdependence on the rapport / synchrony relationship.
+
+## Methods and Measurements
+
+### Inventory of Interpersonal Problems (Horowitz, Alden, Wiggins, & Pincus, 2000)
+
+
+
+
+## Results
+
+### Study 1
+
+```{r echo=FALSE}
+library(psych)
+library(readxl)
+study1_final_indiv <- read_excel("rapport_synchrony_dataset/JOPD_-_Data_-_Study_1_FINAL.xls", sheet = "Individual Data - Table 1")
+study1_final_dyad <- read_excel("rapport_synchrony_dataset/JOPD_-_Data_-_Study_1_FINAL.xls", sheet = "Dyadic Data - Table 1")
+```
+
+#### Relationship between synchrony and rapport
+
+```{r}
+df.synch_rapport <- study1_final_dyad[,c(21:35)]
+pairs.panels(df.synch_rapport, pch=".", gap=0)
+```
+
+```{r}
+pairs.panels(df.synch_rapport[,c("RAP", "FIQ", "grand_mean", "pace_mean", "lead_mean", "Z_pace", "Z_lead")])
+```
+
+Highest correlations with main rapport measure RAP is .33 with Z_pace and 0.24 for pace_mean respectively.  It correlates 0.07 with the main synchrony measure, grand_mean, however.
+
+```{r}
+#IIP
+iip_idxs <- c(7:16)
+iip_data <- study1_final_indiv[,iip_idxs]
+pairs.panels(iip_data, pch=".", gap=0)
+```
+
+#### Experimental Conditions
+Simple version of the RQ how does the gender specificity of the task influence the rapport or synchrony. The theory suggests that dominant communication displays will make rapport harder to establish. 
+
+> Using a 2 (Gender Specificity of Task: Masculine vs. Feminine) X 2 (Partition of Responsibility: Equal or Individual) between-subjects design
+
+
+
+
+```{r}
+
+exp_cond <- c("Sex_Makeup", "Gender_Task", "Response_Dyad")
+rapport <- c("FIQ", "RAP")
+synchrony <- c("grand_mean", "pace_mean", "lead_mean")
+
+center_scale <- function(x) {
+    scale(x, scale = TRUE)
+}
+
+
+df <- study1_final_dyad[,c(exp_cond, rapport, synchrony)]
+
+```
+
+```{r}
+describe(df)
+```
+
+```{r}
+df[,c(4:8)] <- center_scale(df[,c(4:8)])
+describe(df)
+```
+```{r}
+pairs.panels(df, pch=".", gap=0)
+```
+
+Okay now examining two way anova ((procedure followed from this resource)[http://rcompanion.org/handbook/G_09.html])
+
+```{r}
+# Order levels of the factor
+df$Sex_Makeup <- lapply(df$Sex_Makeup, function(x) if(x==1) "FF" else if (x==2) "FM" else if (x==3) "MM")
+df$Gender_Task <- lapply(df$Gender_Task, function(x) if(x==1) "Feminine" else "Masculine")
+df$Response_Dyad <- lapply(df$Response_Dyad, function(x) if(x==1) "Dyad" else "Individual")
+df$Sex_Makeup <- factor(df$Sex_Makeup, levels=unique(df$Sex_Makeup))
+df$Gender_Task <- factor(df$Gender_Task, levels = unique(df$Gender_Task))
+df$Response_Dyad <- factor(df$Response_Dyad, levels = unique(df$Response_Dyad))
+
+# Simple interaction plot
+interaction.plot(x.factor     = df$Gender_Task,
+                 trace.factor = df$Response_Dyad,
+                 response     = df$RAP,
+                 fun = mean,
+                 type="b",
+                 col=c("black","red","green"),  ### Colors for levels of trace var.
+                 pch=c(19, 17, 15),             ### Symbols for levels of trace var.
+                 fixed=TRUE,                    ### Order by factor order in data
+                 leg.bty = "o")
+```
+
+Lowest rapports reported for feminine gendered tasks, when the dyad was given responsibility. Highest rapport for feminine gendered tasks, when an individual was given responsibility.
+
+The fact that the interaction lines are crossing indicate some interaction effect between these two experimental conditions.
+
+```{r}
+model = lm(RAP ~ Gender_Task + Response_Dyad + Gender_Task:Response_Dyad,
+           data = df)
+anova(model)
+```
+
+The main effects of the experiment for study 1 is not significant for the variance in main rapport measure RAP.
+```{r}
+# Simple interaction plot
+interaction.plot(x.factor     = df$Gender_Task,
+                 trace.factor = df$Sex_Makeup,
+                 response     = df$RAP,
+                 fun = mean,
+                 type="b",
+                 col=c("black","red","green"),  ### Colors for levels of trace var.
+                 pch=c(19, 17, 15),             ### Symbols for levels of trace var.
+                 fixed=TRUE,                    ### Order by factor order in data
+                 leg.bty = "o")
+```
+
+```{r}
+model = lm(RAP ~ Sex_Makeup + Gender_Task + Response_Dyad + Gender_Task:Response_Dyad + Sex_Makeup:Gender_Task + Sex_Makeup:Response_Dyad + Sex_Makeup:Gender_Task:Response_Dyad,
+           data = df)
+anova(model)
+```
+
+
+
+```{r}
+# remove rows that have NA values for grand_mean
+df_no_na <- df[complete.cases(df),]
+
+interaction.plot(x.factor     = df_no_na$Gender_Task,
+                 trace.factor = df_no_na$Response_Dyad,
+                 response     = df_no_na$grand_mean,
+                 fun = mean,
+                 type="b",
+                 col=c("black","red","green"),  ### Colors for levels of trace var.
+                 pch=c(19, 17, 15),             ### Symbols for levels of trace var.
+                 fixed=TRUE,                    ### Order by factor order in data
+                 leg.bty = "o")
+```
+
+```{r}
+
+```
+
+
+# References
+
+Journal of Open Psychology Data Publication https://openpsychologydata.metajnl.com/articles/10.5334/jopd.ae/
+
+Dataset Files https://osf.io/gukj2/files/
+
+
+Some tips for more complicated modeling, see SEM and HLM https://researchbasics.education.uconn.edu/anova_regression_and_chi-square/#
+
+
+
+
+
