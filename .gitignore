@@ -40,3 +40,6 @@ vignettes/*.pdf
 # datasets
 project/rapport_synchrony_dataset/
 psychographic_profiling/ 
+
+# R html notebooks
+*.nb.html
