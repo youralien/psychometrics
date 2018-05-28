@@ -1,0 +1,64 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+# EFA
+
+Create your example correlation matrix from "Basics" of 405 EFA slides
+```{r}
+library("psych", lib.loc="/Library/Frameworks/R.framework/Versions/3.4/Resources/library")
+R <- 9:4 %*% t(9:4) / 100
+diag(R) <- 1
+R
+```
+
+Check out Eigen or PCA of the Correlation Matrix
+
+```{r}
+e <- eigen(R)
+print(e, digits=2)
+```
+
+The square root of the R = eigvectors * sqrt(eigvalues)
+```{r}
+print(sqrt(e$values) * e$vectors, digits=2)
+```
+
+This should look the same
+```{r}
+principal(R)
+```
+
+Check out reduced correlation matrix, R = FF + U^2
+
+
+
+# Rotations
+
+```{r}
+data("Harman23.cor")
+lowerMat(Harman23.cor$cov)
+```
+
+```{r}
+f1 <- fa(Harman23.cor$cov,2,rotate="none")
+f1
+```
+
+```{r}
+f2 <- fa(Harman23.cor$cov,2,rotate="varimax")
+f2
+```
+
+Parsimony -- comparing the ^4, the variances of the SS loadings
+
+```{r}
+print("non rotated")
+print(sum(f1$loadings[,1]^4),digits=2)
+print(sum(f1$loadings[,2]^4),digits=2)
+print("varimax rotation")
+print(sum(f2$loadings[,1]^4),digits=2)
+print(sum(f2$loadings[,2]^4),digits=2)
+```
+
