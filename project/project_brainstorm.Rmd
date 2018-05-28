@@ -1,0 +1,34 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+## Sprint Log
+
+
+
+## Emily Falk Talk
+- Correlation Came up with the 40 negative and neutral messages, with 3 components (health vs social), then did a correlation matrix of images, with the value the VMPC affect.
+- Less Suspectible to Up-Down Regulate ... something with defensivness
+
+## Measuring Psychological Presence + Situational Awareness in Remote Work
+- [Measuring Presence in Virtual Environments: A Presence Questionnaire](https://dl.acm.org/citation.cfm?id=1246762)
+- [The Factor Structure of the Presence Questionare](https://www.mitpressjournals.org/doi/abs/10.1162/105474605323384654) found 4 factors that explained presence
+- [Designing to support situational awareness across distances: an example from a scientific collaboratory](https://www.sciencedirect.com/science/article/abs/pii/S0306457303000839) believes that factors such as control, sensory, distraction and realism in virtual reality systems matter for presence. We suggest that consideration of these attributes with respect to contextual, task and process, and socio-emotional information provides insights to guide design decisions.
+
+## Measuring Affective Benefits and Costs of Communication Tech
+
+- Lana Yarosh ([Affective Benefits and Costs of Communication Tech questionare](https://dl.acm.org/citation.cfm?id=2531634)), learning about inter-item reliability
+- She has a data analysis from her ShareTable system
+- I could do a meta analysis of the systems evaluated by ABCCT
+
+## Longitudinal Study of Evaluation in DTR
+
+- How does the interview data and the prescreens correlate to outcomes? 
+- ... How many quarters do you stay?
+- 
+
+## Building 
+
+
+

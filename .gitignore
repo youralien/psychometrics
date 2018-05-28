@@ -34,3 +34,9 @@ vignettes/*.pdf
 
 # PDFs
 *.pdf
+
+.Rproj.user
+
+# datasets
+project/rapport_synchrony_dataset/
+psychographic_profiling/ 
