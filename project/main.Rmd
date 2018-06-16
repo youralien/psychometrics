@@ -86,6 +86,43 @@ omega(study2_raw.iri)
 omega(study2_raw.igb)
 ```
 
+## Reliability Analysis of Post-Test Items
+```{r echo=FALSE}
+study2_raw.irq <- study2_raw[,c(74:(74+18-1))]
+study2_raw.panas <- study2_raw[,c(92:(92+20-1))]
+study2_raw.fiq <- study2_raw[,c(112:(112+15-1))]
+study2_raw.post_rapport <- study2_raw[,c(74:(74+18+20+15-1))]
+```
+
+For the main measure of rapport, IRQ, $\alpha = 0.91$ and $\omega_h = 0.64$.
+```{r include=FALSE, results="hide"}
+omega(study2_raw.irq)
+```
+
+For the Positive Negative Affect Scale PANAS, $\alpha = 0.83$ and $\omega_h = 0.18$.  There is not a general factor for PANAS, which is why my subsequent analysis's do not include PANAS as the post-test outcome variable.
+```{r include=FALSE, results="hide"}
+omega(study2_raw.panas)
+```
+
+For the Future Interactions Questionaire FIQ, $\alpha = 0.93$ and $\omega_h = 0.83$.  This is quite a reliable measure of a general factor describing the feelings of rapport that might carry into future interactions.
+```{r include=FALSE, results="hide"}
+omega(study2_raw.fiq)
+```
+
+I would think that the FIQ would be heavily influenced by Relation Length and Relation Quality, which characterize to what extent participants knew each other beforehand. These two covariates, when taken together in a multiple regression, can predict FIQ very well, ($R = 0.53, p = 1.99e-08$).
+
+```{r}
+study2_final_indiv <- read_excel("rapport_synchrony_dataset/JOPD_-_Data_-_Study_2_FINAL.xls", sheet = "Individual Data - Table 1")
+setCor(FIQ ~ Relation_Length + Relation_Quality, data=study2_final_indiv)
+```
+
+```{r}
+setCor(RAP ~ Relation_Length + Relation_Quality, data=study2_final_indiv)
+```
+
+Together, multiple regression using these covariates does account for the variation in RAP significantly ($R = 0.24, p = 0.04$), although not as much as FIQ. This fact might be more reason to use RAP as a measure of the rapport due to the interaction, less confounded on covariates depending on the predetermined relationship between the dyad prior to the study.
+
+
 ## Exploratory Factor Analysis of Computerized Pretests
 
 ```{r echo=FALSE, warning=FALSE, results="hide"}
